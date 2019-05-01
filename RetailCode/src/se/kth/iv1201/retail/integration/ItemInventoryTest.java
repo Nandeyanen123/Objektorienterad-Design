@@ -23,7 +23,7 @@ public class ItemInventoryTest {
         inventory = null;
     }
 
-    @Test
+    /*@Test
     public void testUpdateSoldInventory() {
         ItemDTO[] updatedItems = new ItemDTO[2];
         updatedItems[0] = new ItemDTO(1,"Tomato", 10.0, 1.12, 2);
@@ -57,7 +57,7 @@ public class ItemInventoryTest {
         inventory.updateInventory(updatedItems);
         ItemDTO[] result = inventory.getItemsInInventory();
         assertEquals("the inventory list is not updated as expected", expectedResults, result);
-    }
+    }*/
 
     @Test
     public void testGetItemFromInventorySuccessful() {

@@ -78,9 +78,9 @@ public class Controller {
         if(quantity<1){
             return "No items will be added if \"quantity\" is less than 1.";
         }
-        ItemDTO item = itemInventory.getItemFromInventory(itemID);
+        ItemDTO item = itemInventory.getItemFromInventory(itemID, quantity);
         if(item != null){
-            item.setQuantity(quantity);
+            //item.setQuantity(quantity);
             itemRecord.recordSoldItem(item);
             sale.addItemAndUpdate(item);
             return sale.getSaleDTO().toString();
@@ -120,11 +120,14 @@ public class Controller {
             Receipt printerReceipt = sale.pay(payment);
             salesLog.logCompletedSale(currentSale);
             externalAccounting.sendCompletedSale(currentSale);
-            itemInventory.updateInventory(currentSale.getRegisteredItems());
+            //itemInventory.updateInventory(currentSale.getRegisteredItems());
             register.addPaymentAndUpdate(payment);
             System.out.println("Change for customer: " + payment.getChange());
             System.out.println("Current amount in register: " + register.getAmountInRegister() + "\n");
             printer.printReceipt(printerReceipt);
+            for(ItemDTO item:itemInventory.getItemsInInventory()) {
+                System.out.println(item.toString());
+            }
             return "\n\nSale completed";
         }
         else{

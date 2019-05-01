@@ -27,7 +27,7 @@ public class Register {
      * @param payment The payment paid by the customer.
      */
     public void addPaymentAndUpdate(CashPayment payment){
-        if(payment.getChange()<=amountInRegister) {
+        if(payment.getChange()<=(amountInRegister + payment.getAmount())){
             amountInRegister += payment.getAmount() - payment.getChange();
         } else{
             System.out.println("There is not enough money in the register for all of the change.\n" +
