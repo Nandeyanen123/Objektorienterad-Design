@@ -3,51 +3,57 @@ package se.kth.iv1201.retail.model;
 import java.util.*;
 import se.kth.iv1201.retail.integration.*;
 
+/**
+ * Represents a sale that is ongoing.
+ */
 public class Sale {
     private SaleDTO sale;
 
+    /**
+     * Constructs a <code>Sale</code> object with a random identifier in the DTO.
+     */
     public Sale(){
         Random random = new Random();
         this.sale = new SaleDTO(random.nextInt(1000000));
     }
 
+    /**
+     * Adds an item to the sale. Uses method <code>itemExists()</code> to
+     * check if the item to be added already exists in the sale or not.
+     * If it does exist it adds the quantity of the item to be added to its
+     * previous representation in the <code>SaleDTO</code> and returns <code>true</code>.
+     * If not the item just gets added. Calculates the new running total by using
+     * method <code>calculatePriceWithVAT()</code>.
+     *
+     * @param item The item to be added.
+     */
     public void addItemAndUpdate(ItemDTO item){
+        if(!sale.getRegistrationFinished()) {
+            boolean existed = itemExists(item);
+            if (!existed) {
+                this.sale.addItem(item);
+            }
+            this.sale.setQuantity(this.sale.getQuantity() + item.getQuantity());
+            this.sale.setRunningTotal(calculatePriceWithVAT());
+        } else{
+            System.out.println("Item registration is already finished.\n" +
+                    "Ask the customer for payment.\n");
+        }
+    }
+
+    private boolean itemExists(ItemDTO item){
         boolean existed = false;
         int i = 0;
         if(!sale.isEmpty()) {
-            //for (int i = 0; i < sale.getRegisteredItems().length; i++) {
-            while(sale.getRegisteredItems()[i] != null && i<sale.getRegisteredItems().length){
+            while (sale.getRegisteredItems()[i] != null && i < sale.getRegisteredItems().length) {
                 if (sale.getRegisteredItems()[i].getItemID() == item.getItemID()) {
                     sale.getRegisteredItems()[i].setQuantity(sale.getRegisteredItems()[i].getQuantity() + item.getQuantity());
                     existed = true;
                 }
                 i++;
             }
-        }if(!existed){
-            this.sale.addItem(item);
-        }
-        this.sale.setQuantity(this.sale.getQuantity()+item.getQuantity());
-        this.sale.setRunningTotal(calculatePriceWithVAT());
+        } return existed;
     }
-
-    public void registrationFinished(){
-        this.sale.setCompleted(true);
-    }
-
-    public Receipt pay(CashPayment payment){
-        Receipt saleReceipt = new Receipt(sale, payment);
-        return saleReceipt;
-    }
-
-    /*public boolean itemExistsInSale(ItemDTO item){
-        boolean exists = false;
-        for(int i = 0; i<sale.getRegisteredItems().length; i++){
-            if(sale.getRegisteredItems()[i].getItemID() == item.getItemID()){
-                exists = true;
-            }
-        }
-        return exists;
-    }*/
 
     private double calculatePriceWithVAT(){
         double calculatedPrice = 0;
@@ -59,6 +65,42 @@ public class Sale {
         return calculatedPrice;
     }
 
+    /**
+     * Signals that the registration of items is finished.
+     */
+    public void registrationFinished(){
+        this.sale.setRegistrationFinished(true);
+    }
+
+    /**
+     * Signals that the sale has been successfully completed.
+     */
+    public void completedSale(){
+        this.sale.setCompleted(true);
+    }
+
+    /**
+     * Creates and return a <code>Receipt</code> object based on the current sale.
+     *
+     * @param payment The payment to be added to the receipt.
+     * @return The <code>Receipt</code> object.
+     */
+    public Receipt pay(CashPayment payment){
+        if(sale.getCompleted()) {
+            Receipt saleReceipt = new Receipt(sale, payment);
+            return saleReceipt;
+        } else{
+            System.out.println("The customer needs to pay before a receipt\n" +
+                    "can be printed.\n");
+            return null;
+        }
+    }
+
+    /**
+     * Returns the <code>SaleDTO</code> object of the current sale.
+     *
+     * @return The <code>SaleDTO</code> object.
+     */
     public SaleDTO getSaleDTO(){
         return sale;
     }

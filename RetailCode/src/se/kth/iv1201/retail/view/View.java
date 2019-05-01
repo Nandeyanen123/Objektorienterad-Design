@@ -3,13 +3,24 @@ package se.kth.iv1201.retail.view;
 import se.kth.iv1201.retail.controller.Controller;
 import se.kth.iv1201.retail.model.Amount;
 
+/**
+ * This is a placeholder class for the entire view.
+ */
 public class View {
     private Controller controller;
 
+    /**
+     * Creates a new instance of the View.
+     *
+     * @param controller The controler that is used for all operations.
+     */
     public View(Controller controller){
         this.controller = controller;
     }
 
+    /**
+     * Simulates user input to generate calls to illustrate program flow.
+     */
     public void sampleExecution(){
         controller.startNewSale();
         System.out.println(controller.addItem(1));
@@ -22,7 +33,7 @@ public class View {
 
         System.out.println(controller.registrationFinished());
 
-        Amount paidAmount = new Amount(60000);
+        Amount paidAmount = new Amount(30000);
         System.out.println(controller.pay(paidAmount));
     }
 }
