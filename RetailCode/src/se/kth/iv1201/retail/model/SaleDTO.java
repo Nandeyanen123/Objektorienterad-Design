@@ -39,7 +39,11 @@ public class SaleDTO {
         StringBuilder builder = new StringBuilder();
         builder.append("saleID: " + saleID + ", ");
         builder.append("completed: " + completed + ", ");
-        builder.append("runningTotal: " + runningTotal + ", ");
+        if(registrationFinished){
+            builder.append("Total price: " + runningTotal + ", ");
+        } else {
+            builder.append("runningTotal: " + runningTotal + ", ");
+        }
         builder.append("registeredItems: ");
         for(ItemDTO item:registeredItems){
             if(item != null) {

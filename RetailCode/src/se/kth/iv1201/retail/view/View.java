@@ -12,7 +12,7 @@ public class View {
     /**
      * Creates a new instance of the View.
      *
-     * @param controller The controler that is used for all operations.
+     * @param controller The controller that is used for all operations.
      */
     public View(Controller controller){
         this.controller = controller;
@@ -23,17 +23,29 @@ public class View {
      */
     public void sampleExecution(){
         controller.startNewSale();
-        System.out.println(controller.addItem(1));
-        System.out.println(controller.addItem(543));
-        System.out.println(controller.addItem(2));
-        System.out.println(controller.addItem(1));
-        System.out.println(controller.addItem(3,4));
-        System.out.println(controller.addItem(24,56));
-        System.out.println(controller.addItem(2,3));
+        int itemID = 1;
+        System.out.println(controller.addItem(itemID));
+        itemID = 543;
+        Object nullView = controller.addItem(itemID);
+        if(nullView != null){
+            System.out.println(nullView);
+        } else{
+            System.out.println("The identifier " + itemID + "is not valid.");
+        }
+        itemID = 2;
+        System.out.println(controller.addItem(itemID));
+        itemID = 1;
+        System.out.println(controller.addItem(itemID));
+        itemID = 3;
+        System.out.println(controller.addItem(itemID,4));
+        itemID = 24;
+        System.out.println(controller.addItem(itemID,56));
+        itemID = 2;
+        System.out.println(controller.addItem(itemID,3));
 
-        System.out.println(controller.registrationFinished());
+        controller.registrationFinished();
 
         Amount paidAmount = new Amount(30000);
-        System.out.println(controller.pay(paidAmount));
+        System.out.println("Change for customer: " + controller.pay(paidAmount).getChange());
     }
 }

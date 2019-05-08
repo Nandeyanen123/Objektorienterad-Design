@@ -18,12 +18,10 @@ public class Sale {
     }
 
     /**
-     * Adds an item to the sale. Uses method <code>itemExists()</code> to
-     * check if the item to be added already exists in the sale or not.
+     * Adds an item to the sale. Checks if the item to be added already exists in the sale or not.
      * If it does exist it adds the quantity of the item to be added to its
      * previous representation in the <code>SaleDTO</code> and returns <code>true</code>.
-     * If not the item just gets added. Calculates the new running total by using
-     * method <code>calculatePriceWithVAT()</code>.
+     * If not the item just gets added. Afterwards a new running total is calculated.
      *
      * @param item The item to be added.
      */
@@ -35,9 +33,6 @@ public class Sale {
             }
             this.sale.setQuantity(this.sale.getQuantity() + item.getQuantity());
             this.sale.setRunningTotal(calculatePriceWithVAT());
-        } else{
-            System.out.println("Item registration is already finished.\n" +
-                    "Ask the customer for payment.\n");
         }
     }
 
@@ -89,11 +84,8 @@ public class Sale {
         if(sale.getCompleted()) {
             Receipt saleReceipt = new Receipt(sale, payment);
             return saleReceipt;
-        } else{
-            System.out.println("The customer needs to pay before a receipt\n" +
-                    "can be printed.\n");
-            return null;
         }
+        return null;
     }
 
     /**

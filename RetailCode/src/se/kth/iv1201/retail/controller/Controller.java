@@ -49,55 +49,49 @@ public class Controller {
      * sale if the object exists.
      *
      * @param itemID The identifier for the <code>Item</code> object.
-     * @return A <code>String</code> with either the updated sale or
-     * an error message if no item is found.
+     * @return A <code>SaleDTO</code> with the current sale.
      */
-    public String addItem(int itemID){
+    public SaleDTO addItem(int itemID) {
         ItemDTO item = itemInventory.getItemFromInventory(itemID);
-        if(item != null){
+        if (item != null) {
             itemRecord.recordSoldItem(item);
             sale.addItemAndUpdate(item);
-            return sale.getSaleDTO().toString();
-        } else{
-            return ("There is no Item with the identifier: " + itemID);
-        }
+            return sale.getSaleDTO();
+        } return null;
     }
 
     /**
      * Overloads <code>addItem()</code> if a quantity parameter is present
      * it then sets the quantity attribute of the object fetched to what is
-     * inputted. Returns an additional error message if the quantity is less than
-     * 1.
+     * inputted.
      *
      * @param itemID Object identifier.
      * @param quantity Specifies the quantity of the <code>Item</code>
      *                 to be added.
      * @return Updated <code>Sale</code> or error messages.
      */
-    public String addItem(int itemID, int quantity){
+    public SaleDTO addItem(int itemID, int quantity){
         if(quantity<1){
-            return "No items will be added if \"quantity\" is less than 1.";
+            return null;
         }
         ItemDTO item = itemInventory.getItemFromInventory(itemID, quantity);
-        if(item != null){
-            //item.setQuantity(quantity);
+        if(item != null) {
             itemRecord.recordSoldItem(item);
             sale.addItemAndUpdate(item);
-            return sale.getSaleDTO().toString();
-        } else{
-            return ("There is no Item with the identifier: " + itemID);
+            return sale.getSaleDTO();
         }
+            return null;
     }
 
     /**
      *Shows the user the total price for the <code>Sale</code>
      * after registration is finished.
      *
-     * @return The total price for the sale.
+     * @return The sale with total price.
      */
-    public String registrationFinished(){
+    public SaleDTO registrationFinished(){
         sale.registrationFinished();
-        return ("Total price: " + sale.getSaleDTO().getRunningTotal());
+        return sale.getSaleDTO();
     }
 
     /**
@@ -112,8 +106,8 @@ public class Controller {
      * @return A confirmation that the sale is completed or an error message
      * stating that the customer hasn't paid enough.
      */
-    public String pay(Amount paidAmt){
-        if(paidAmt.getAmount()>=sale.getSaleDTO().getRunningTotal()) {
+    public CashPayment pay(Amount paidAmt) {
+        if (paidAmt.getAmount() >= sale.getSaleDTO().getRunningTotal()) {
             sale.completedSale();
             SaleDTO currentSale = sale.getSaleDTO();
             CashPayment payment = new CashPayment(paidAmt, currentSale);
@@ -121,13 +115,8 @@ public class Controller {
             salesLog.logCompletedSale(currentSale);
             externalAccounting.sendCompletedSale(currentSale);
             register.addPaymentAndUpdate(payment);
-            System.out.println("Change for customer: " + payment.getChange());
-            System.out.println("Current amount in register: " + register.getAmountInRegister() + "\n");
             printer.printReceipt(printerReceipt);
-            return "\n\nSale completed";
-        }
-        else{
-            return "It's time to put in more coins, man.";
-        }
+            return payment;
+        } return null;
     }
 }

@@ -35,38 +35,6 @@ public class ItemInventory {
         this.itemsInInventory = items;
     }
 
-    /**
-     * Updates the inventory based on the array of objects sent in.
-     * It uses the private method <code>calculateItems()</code> to decrease
-     * or increase the items in stock based on their status as <code>sold</code> or <code>returned</code>.
-     *
-     * @param items The array of objects.
-     */
-    /*public void updateInventory(ItemDTO[] items){
-        calculateItems(items);
-    }
-
-    private void calculateItems(ItemDTO[] items){
-        //for(int i = 0; i<items.length; i++){
-        int i = 0;
-        int j = 0;
-        while(i<items.length){
-            if(items[i] != null) {
-                while (!itemsInInventory[j].equals(items[i]) && j < itemsInInventory.length) {
-                    j++;
-                }
-                if (items[i].getSold()) {
-                    int newQuantity = itemsInInventory[j].getQuantity() - items[i].getQuantity();
-                    itemsInInventory[j].setQuantity(newQuantity);
-                } else if (items[i].getReturned()) {
-                    int newQuantity = itemsInInventory[j].getQuantity() + items[i].getQuantity();
-                    itemsInInventory[j].setQuantity(newQuantity);
-                }
-                j = 0;
-            }
-            i++;
-        }
-    }*/
 
     /**
      * Gets an item from the inventory database by searching through the object array.
@@ -83,10 +51,9 @@ public class ItemInventory {
 
     /**
      * Gets an item from the inventory database by searching through the object array in a similar
-     * way to the overriden method with one argument.
-     * This method also enables it to specify the quantity of items to retrieve and has an
-     * algorithm in the private method to see if there are enough items in stock to give all
-     * and if not give a somewhat fair distribution.
+     * way to the overridden method with one argument.
+     * This method also enables it to specify the quantity of items to retrieve and checks
+     * if there are enough items in stock to give the requested amount and if not gives a somewhat fair distribution.
      * If an item is found it returns the Item with its status set as <code>sold</code> and its
      * <code>quantity</code> to one.
      *
@@ -100,17 +67,12 @@ public class ItemInventory {
 
     private ItemDTO searchInventory(int itemID){
         for(int i = 0; i<itemsInInventory.length; i++){
-            if(itemID == itemsInInventory[i].getItemID()) {
-                if(itemsInInventory[i].getQuantity()>0){
-                    ItemDTO foundItem = new ItemDTO(itemsInInventory[i].getItemID(), itemsInInventory[i].getItemName(),
-                            itemsInInventory[i].getPrice(), itemsInInventory[i].getVAT(), 1);
-                    itemsInInventory[i].setQuantity(itemsInInventory[i].getQuantity() - 1);
-                    foundItem.setSold(true);
-                    return foundItem;
-                } else{
-                    System.out.println("There are no more of this kind of item in stock.");
-                    return null;
-                }
+            if(itemID == itemsInInventory[i].getItemID() && itemsInInventory[i].getQuantity()>0) {
+                ItemDTO foundItem = new ItemDTO(itemsInInventory[i].getItemID(), itemsInInventory[i].getItemName(),
+                        itemsInInventory[i].getPrice(), itemsInInventory[i].getVAT(), 1);
+                itemsInInventory[i].setQuantity(itemsInInventory[i].getQuantity() - 1);
+                foundItem.setSold(true);
+                return foundItem;
             }
         }
         return null;
@@ -118,7 +80,7 @@ public class ItemInventory {
 
     private ItemDTO searchInventory(int itemID, int quantity){
         for(int i = 0; i<itemsInInventory.length; i++){
-            if(itemID == itemsInInventory[i].getItemID()) {
+            if(itemID == itemsInInventory[i].getItemID() && quantity>0) {
                 if ((itemsInInventory[i].getQuantity()-quantity) > 0) {
                     ItemDTO foundItem = new ItemDTO(itemsInInventory[i].getItemID(), itemsInInventory[i].getItemName(),
                             itemsInInventory[i].getPrice(), itemsInInventory[i].getVAT(), quantity);
@@ -132,19 +94,14 @@ public class ItemInventory {
                                 itemsInInventory[i].getPrice(), itemsInInventory[i].getVAT(), possibleQuantity);
                         itemsInInventory[i].setQuantity(itemsInInventory[i].getQuantity() - possibleQuantity);
                         foundItem.setSold(true);
-                        System.out.println("You can only register " + possibleQuantity + " of this item.");
                         return foundItem;
                     }else{
                         ItemDTO foundItem = new ItemDTO(itemsInInventory[i].getItemID(), itemsInInventory[i].getItemName(),
                                 itemsInInventory[i].getPrice(), itemsInInventory[i].getVAT(), 1);
                         itemsInInventory[i].setQuantity(itemsInInventory[i].getQuantity() - 1);
                         foundItem.setSold(true);
-                        System.out.println("You can only register 1 of this item.");
                         return foundItem;
                     }
-                } else{
-                    System.out.println("There are no more of this kind of item in stock.");
-                    return null;
                 }
             }
         }
