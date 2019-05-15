@@ -9,7 +9,6 @@ public class Register {
     private IncomeObserver incomeObserver;
     private int registerID;
     private double amountInRegister;
-    private double income;
 
     /**
      * Creates a <code>Register</code> object with a random identifier and a
@@ -19,7 +18,6 @@ public class Register {
         Random random = new Random();
         this.registerID = random.nextInt(100);
         this.amountInRegister = Math.round(10 + (10000 - 10) * random.nextDouble()*10d/10d);
-        this.income = 0;
     }
 
     /**
@@ -31,8 +29,8 @@ public class Register {
      */
     public void addPaymentAndUpdate(CashPayment payment){
         if(payment.getChange()<=(amountInRegister + payment.getAmount())){
-            income = payment.getAmount() - payment.getChange();
-            notifyIncomeObservers();
+            double income = payment.getAmount() - payment.getChange();
+            notifyIncomeObservers(income);
             amountInRegister += income;
         }
     }
@@ -50,7 +48,7 @@ public class Register {
         incomeObserver = observer;
     }
 
-    private void notifyIncomeObservers(){
+    private void notifyIncomeObservers(double income){
         this.incomeObserver.newIncome(income);
     }
 }
