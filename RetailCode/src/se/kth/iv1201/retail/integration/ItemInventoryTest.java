@@ -23,42 +23,6 @@ public class ItemInventoryTest {
         inventory = null;
     }
 
-    /*@Test
-    public void testUpdateSoldInventory() {
-        ItemDTO[] updatedItems = new ItemDTO[2];
-        updatedItems[0] = new ItemDTO(1,"Tomato", 10.0, 1.12, 2);
-        updatedItems[1] = new ItemDTO(2,"Potato", 15.0, 1.25, 3);
-        updatedItems[0].setSold(true);
-        updatedItems[1].setSold(true);
-
-        ItemDTO[] expectedResults = new ItemDTO[3];
-        expectedResults[0] = new ItemDTO(1,"Tomato", 10.0, 1.12, 5);
-        expectedResults[1] = new ItemDTO(2,"Potato", 15.0, 1.25, 6);
-        expectedResults[2] = new ItemDTO(3,"Pomade", 17.5, 1.06, 5);
-
-        inventory.updateInventory(updatedItems);
-        ItemDTO[] result = inventory.getItemsInInventory();
-        assertEquals("the inventory list is not updated as expected", expectedResults, result);
-    }
-
-    @Test
-    public void testUpdateReturnedInventory() {
-        ItemDTO[] updatedItems = new ItemDTO[2];
-        updatedItems[0] = new ItemDTO(1,"Tomato", 10.0, 1.12, 2);
-        updatedItems[1] = new ItemDTO(2,"Potato", 15.0, 1.25, 3);
-        updatedItems[0].setSold(true);
-        updatedItems[1].setSold(true);
-
-        ItemDTO[] expectedResults = new ItemDTO[3];
-        expectedResults[0] = new ItemDTO(1,"Tomato", 10.0, 1.12, 1);
-        expectedResults[1] = new ItemDTO(2,"Potato", 15.0, 1.25, 1);
-        expectedResults[2] = new ItemDTO(3,"Pomade", 17.5, 1.06, 5);
-
-        inventory.updateInventory(updatedItems);
-        ItemDTO[] result = inventory.getItemsInInventory();
-        assertEquals("the inventory list is not updated as expected", expectedResults, result);
-    }*/
-
     @Test
     public void testGetItemFromInventorySuccessful() {
         int itemID = 1;

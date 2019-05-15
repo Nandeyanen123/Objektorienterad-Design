@@ -6,8 +6,10 @@ import java.util.*;
  * Represents the register that the cashier uses.
  */
 public class Register {
+    private IncomeObserver incomeObserver;
     private int registerID;
     private double amountInRegister;
+    private double income;
 
     /**
      * Creates a <code>Register</code> object with a random identifier and a
@@ -17,6 +19,7 @@ public class Register {
         Random random = new Random();
         this.registerID = random.nextInt(100);
         this.amountInRegister = Math.round(10 + (10000 - 10) * random.nextDouble()*10d/10d);
+        this.income = 0;
     }
 
     /**
@@ -28,10 +31,9 @@ public class Register {
      */
     public void addPaymentAndUpdate(CashPayment payment){
         if(payment.getChange()<=(amountInRegister + payment.getAmount())){
-            amountInRegister += payment.getAmount() - payment.getChange();
-        } else{
-            System.out.println("There is not enough money in the register for all of the change.\n" +
-                    "Ask the customer to pay with smaller bills.\n");
+            income = payment.getAmount() - payment.getChange();
+            notifyIncomeObservers();
+            amountInRegister += income;
         }
     }
 
@@ -42,5 +44,13 @@ public class Register {
      */
     public double getAmountInRegister(){
         return amountInRegister;
+    }
+
+    public void addIncomeObserver(IncomeObserver observer){
+        incomeObserver = observer;
+    }
+
+    private void notifyIncomeObservers(){
+        this.incomeObserver.newIncome(income);
     }
 }

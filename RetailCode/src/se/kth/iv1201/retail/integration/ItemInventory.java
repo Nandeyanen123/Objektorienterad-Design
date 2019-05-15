@@ -76,7 +76,7 @@ public class ItemInventory {
      * @param itemID The item identifier used for searching.
      * @return The created <code>ItemDTO</code> object.
      */
-    public ItemDTO getItemFromInventory(int itemID){
+    public ItemDTO getItemFromInventory (int itemID) throws ItemInventoryException {
         ItemDTO foundItem = searchInventory(itemID);
         return foundItem;
     }
@@ -92,6 +92,8 @@ public class ItemInventory {
      *
      * @param itemID The item identifier used for searching.
      * @return The created <code>ItemDTO</code> object.
+     * @throws ItemInventoryException if the specified <code>itemID</code>
+     * does not correspond to an item in the inventory.
      */
     public ItemDTO getItemFromInventory(int itemID, int quantity){
         ItemDTO foundItem = searchInventory(itemID,quantity);
@@ -99,56 +101,57 @@ public class ItemInventory {
     }
 
     private ItemDTO searchInventory(int itemID){
-        for(int i = 0; i<itemsInInventory.length; i++){
-            if(itemID == itemsInInventory[i].getItemID()) {
-                if(itemsInInventory[i].getQuantity()>0){
-                    ItemDTO foundItem = new ItemDTO(itemsInInventory[i].getItemID(), itemsInInventory[i].getItemName(),
-                            itemsInInventory[i].getPrice(), itemsInInventory[i].getVAT(), 1);
-                    itemsInInventory[i].setQuantity(itemsInInventory[i].getQuantity() - 1);
-                    foundItem.setSold(true);
-                    return foundItem;
-                } else{
-                    System.out.println("There are no more of this kind of item in stock.");
-                    return null;
-                }
-            }
-        }
-        return null;
-    }
-
-    private ItemDTO searchInventory(int itemID, int quantity){
-        for(int i = 0; i<itemsInInventory.length; i++){
-            if(itemID == itemsInInventory[i].getItemID()) {
-                if ((itemsInInventory[i].getQuantity()-quantity) > 0) {
-                    ItemDTO foundItem = new ItemDTO(itemsInInventory[i].getItemID(), itemsInInventory[i].getItemName(),
-                            itemsInInventory[i].getPrice(), itemsInInventory[i].getVAT(), quantity);
-                    itemsInInventory[i].setQuantity(itemsInInventory[i].getQuantity() - quantity);
-                    foundItem.setSold(true);
-                    return foundItem;
-                } else if (itemsInInventory[i].getQuantity()>0) {
-                    int possibleQuantity = Math.abs(itemsInInventory[i].getQuantity() - quantity);
-                    if(itemsInInventory[i].getQuantity()-possibleQuantity>0) {
-                        ItemDTO foundItem = new ItemDTO(itemsInInventory[i].getItemID(), itemsInInventory[i].getItemName(),
-                                itemsInInventory[i].getPrice(), itemsInInventory[i].getVAT(), possibleQuantity);
-                        itemsInInventory[i].setQuantity(itemsInInventory[i].getQuantity() - possibleQuantity);
-                        foundItem.setSold(true);
-                        System.out.println("You can only register " + possibleQuantity + " of this item.");
-                        return foundItem;
-                    }else{
+        if(itemID<=30){
+            for (int i = 0; i < itemsInInventory.length; i++) {
+                if (itemID == itemsInInventory[i].getItemID()) {
+                    if (itemsInInventory[i].getQuantity() > 0) {
                         ItemDTO foundItem = new ItemDTO(itemsInInventory[i].getItemID(), itemsInInventory[i].getItemName(),
                                 itemsInInventory[i].getPrice(), itemsInInventory[i].getVAT(), 1);
                         itemsInInventory[i].setQuantity(itemsInInventory[i].getQuantity() - 1);
                         foundItem.setSold(true);
-                        System.out.println("You can only register 1 of this item.");
                         return foundItem;
                     }
-                } else{
-                    System.out.println("There are no more of this kind of item in stock.");
-                    return null;
+                    throw new ItemInventoryException(("The stock is empty of item with ID: " + itemID));
                 }
             }
         }
-        return null;
+        throw new ItemInventoryException(("There is no item in inventory with the ID: " + itemID));
+    }
+
+    private ItemDTO searchInventory(int itemID, int quantity){
+        if(itemID<=30) {
+            if(quantity>0) {
+                for (int i = 0; i < itemsInInventory.length; i++) {
+                    if (itemID == itemsInInventory[i].getItemID()) {
+                        if ((itemsInInventory[i].getQuantity() - quantity) > 0) {
+                            ItemDTO foundItem = new ItemDTO(itemsInInventory[i].getItemID(), itemsInInventory[i].getItemName(),
+                                    itemsInInventory[i].getPrice(), itemsInInventory[i].getVAT(), quantity);
+                            itemsInInventory[i].setQuantity(itemsInInventory[i].getQuantity() - quantity);
+                            foundItem.setSold(true);
+                            return foundItem;
+                        } else if (itemsInInventory[i].getQuantity() > 0) {
+                            int possibleQuantity = Math.abs(itemsInInventory[i].getQuantity() - quantity);
+                            if (itemsInInventory[i].getQuantity() - possibleQuantity > 0) {
+                                ItemDTO foundItem = new ItemDTO(itemsInInventory[i].getItemID(), itemsInInventory[i].getItemName(),
+                                        itemsInInventory[i].getPrice(), itemsInInventory[i].getVAT(), possibleQuantity);
+                                itemsInInventory[i].setQuantity(itemsInInventory[i].getQuantity() - possibleQuantity);
+                                foundItem.setSold(true);
+                                return foundItem;
+                            } else {
+                                ItemDTO foundItem = new ItemDTO(itemsInInventory[i].getItemID(), itemsInInventory[i].getItemName(),
+                                        itemsInInventory[i].getPrice(), itemsInInventory[i].getVAT(), 1);
+                                itemsInInventory[i].setQuantity(itemsInInventory[i].getQuantity() - 1);
+                                foundItem.setSold(true);
+                                return foundItem;
+                            }
+                        }
+                        throw new ItemInventoryException("The stock is empty of item with ID: " + itemID);
+                    }
+                }
+            }
+            throw new ItemInventoryException("Not allowed to add less than 1 piece of item. You tried to add " + quantity + " pieces.");
+        }
+        throw new ItemInventoryException(("There is no item in inventory with the ID: " + itemID));
     }
 
     /**
