@@ -123,8 +123,6 @@ public class Controller {
             salesLog.logCompletedSale(currentSale);
             externalAccounting.sendCompletedSale(currentSale);
             register.addPaymentAndUpdate(payment);
-            System.out.println("Change for customer: " + payment.getChange());
-            System.out.println("Current amount in register: " + register.getAmountInRegister() + "\n");
             printer.printReceipt(printerReceipt);
             return payment;
         }

@@ -32,14 +32,6 @@ public class ItemInventoryTest {
     }
 
     @Test
-    public void testGetItemFromInventoryUnsuccessful() {
-        int itemID = 5;
-        ItemDTO expectedItem = null;
-        ItemDTO result = inventory.getItemFromInventory(itemID);
-        assertEquals("items that should not exist did.",expectedItem,result);
-    }
-
-    @Test
     public void testGetItemsInInventory() {
         ItemDTO[] expectedItems = new ItemDTO[3];
         expectedItems[0] = new ItemDTO(1,"Tomato", 10.0, 1.12, 3);
@@ -48,5 +40,25 @@ public class ItemInventoryTest {
 
         ItemDTO[] result = inventory.getItemsInInventory();
         assertEquals("the items in the inventory are not the same",expectedItems,result);
+    }
+
+    @Test
+    public void testItemIDExceptionThrown(){
+        try{
+            ItemDTO exceptionItem = inventory.getItemFromInventory(95);
+            fail("Exception was not thrown");
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testItemQuantityExceptionThrown(){
+        try{
+            ItemDTO exceptionItem = inventory.getItemFromInventory(5,-100);
+            fail("Exception was not thrown");
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 }
