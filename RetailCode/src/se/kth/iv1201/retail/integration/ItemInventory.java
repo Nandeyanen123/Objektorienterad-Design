@@ -5,13 +5,15 @@ import java.util.Random;
  * The inventory system for the items in the store.
  */
 public class ItemInventory {
+    private static final ItemInventory ITEM_INVENTORY = new ItemInventory();
     private ItemDTO[] itemsInInventory;
 
     /**
      * Creates an inventory (database) of item objects store in an <code>ItemDTO</code> array.
      * This process is pre-determined and automatized for now. VAT rates are randomly generated.
+     * Has been turned into a Singleton so there is only one instance of the inventory ever created.
      */
-    public ItemInventory(){
+    private ItemInventory(){
         Random random = new Random();
         this.itemsInInventory = new ItemDTO[30];
         for(int i = 0; i<itemsInInventory.length; i++){
@@ -27,46 +29,13 @@ public class ItemInventory {
     }
 
     /**
-     * Overloaded constructor that creates an inventory from a pre-constructed array of objects.
+     * The method that return the instance of <code>ItemInventory</code>.
      *
-     * @param items The <code>ItemDTO</code> array.
+     * @return the inventory.
      */
-    public ItemInventory(ItemDTO[] items){
-        this.itemsInInventory = items;
+    public static ItemInventory getItemInventory(){
+        return ITEM_INVENTORY;
     }
-
-    /**
-     * Updates the inventory based on the array of objects sent in.
-     * It uses the private method <code>calculateItems()</code> to decrease
-     * or increase the items in stock based on their status as <code>sold</code> or <code>returned</code>.
-     *
-     * @param items The array of objects.
-     */
-    /*public void updateInventory(ItemDTO[] items){
-        calculateItems(items);
-    }
-
-    private void calculateItems(ItemDTO[] items){
-        //for(int i = 0; i<items.length; i++){
-        int i = 0;
-        int j = 0;
-        while(i<items.length){
-            if(items[i] != null) {
-                while (!itemsInInventory[j].equals(items[i]) && j < itemsInInventory.length) {
-                    j++;
-                }
-                if (items[i].getSold()) {
-                    int newQuantity = itemsInInventory[j].getQuantity() - items[i].getQuantity();
-                    itemsInInventory[j].setQuantity(newQuantity);
-                } else if (items[i].getReturned()) {
-                    int newQuantity = itemsInInventory[j].getQuantity() + items[i].getQuantity();
-                    itemsInInventory[j].setQuantity(newQuantity);
-                }
-                j = 0;
-            }
-            i++;
-        }
-    }*/
 
     /**
      * Gets an item from the inventory database by searching through the object array.

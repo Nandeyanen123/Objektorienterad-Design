@@ -43,8 +43,7 @@ public class ControllerTest {
 
     @Test
     public void testAddItemWithValidID() {
-        ItemInventory testInventory = logCreator.getItemInventory();
-        ItemDTO expectedItem = testInventory.getItemFromInventory(1);
+        ItemDTO expectedItem = ItemInventory.getItemInventory().getItemFromInventory(1);
         try {
             SaleDTO saleTest = instance.addItem(1);
             ItemDTO[] itemTest = saleTest.getRegisteredItems();
@@ -68,8 +67,7 @@ public class ControllerTest {
 
     @Test
     public void testAddItemWithQuantity() {
-        ItemInventory testInventory = logCreator.getItemInventory();
-        ItemDTO expectedItem = testInventory.getItemFromInventory(1,20);
+        ItemDTO expectedItem = ItemInventory.getItemInventory().getItemFromInventory(1,20);
         try {
             SaleDTO saleTest = instance.addItem(1, 20);
             ItemDTO[] itemTest = saleTest.getRegisteredItems();
@@ -83,8 +81,7 @@ public class ControllerTest {
 
     @Test
     public void testAddItemWithHugeQuantity() {
-        ItemInventory testInventory = logCreator.getItemInventory();
-        ItemDTO expectedItem = testInventory.getItemFromInventory(1, Integer.MAX_VALUE);
+        ItemDTO expectedItem = ItemInventory.getItemInventory().getItemFromInventory(1, Integer.MAX_VALUE);
         try {
             SaleDTO saleTest = instance.addItem(1, Integer.MAX_VALUE);
             ItemDTO[] itemTest = saleTest.getRegisteredItems();

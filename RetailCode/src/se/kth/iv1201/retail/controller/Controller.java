@@ -15,7 +15,7 @@ import se.kth.iv1201.retail.model.*;
 public class Controller {
     private Printer printer;
     private ExternalAccounting externalAccounting;
-    private ItemInventory itemInventory;
+    //private ItemInventory itemInventory;
     private ItemRecord itemRecord;
     private SalesLog salesLog;
     private Sale sale;
@@ -32,7 +32,7 @@ public class Controller {
     public Controller(LoggingCreator creator, Printer printer){
         this.printer = printer;
         this.externalAccounting = creator.getExternalAccounting();
-        this.itemInventory = creator.getItemInventory();
+        //this.itemInventory = creator.getItemInventory();
         this.itemRecord = creator.getItemRecord();
         this.salesLog = creator.getSalesLog();
         this.register = new Register();
@@ -58,7 +58,7 @@ public class Controller {
      */
     public SaleDTO addItem(int itemID) throws OperationFailedException{
         try {
-            ItemDTO item = itemInventory.getItemFromInventory(itemID);
+            ItemDTO item = ItemInventory.getItemInventory().getItemFromInventory(itemID);
             itemRecord.recordSoldItem(item);
             sale.addItemAndUpdate(item);
             return sale.getSaleDTO();
@@ -82,7 +82,7 @@ public class Controller {
      */
     public SaleDTO addItem(int itemID, int quantity) throws OperationFailedException{
         try {
-            ItemDTO item = itemInventory.getItemFromInventory(itemID, quantity);
+            ItemDTO item = ItemInventory.getItemInventory().getItemFromInventory(itemID, quantity);
             itemRecord.recordSoldItem(item);
             sale.addItemAndUpdate(item);
             return sale.getSaleDTO();

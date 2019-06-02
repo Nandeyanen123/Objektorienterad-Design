@@ -1,10 +1,10 @@
-May 16, 2019, 11:23:31 AM, Exception was thrown: Could not add item.
+Jun 2, 2019, 4:33:48 PM, Exception was thrown: Could not add item.
 se.kth.iv1201.retail.controller.OperationFailedException: Could not add item.
 	at se.kth.iv1201.retail.controller.Controller.addItem(Controller.java:66)
 	at se.kth.iv1201.retail.view.View.sampleExecution(View.java:39)
 	at se.kth.iv1201.retail.startup.Main.main(Main.java:21)
 Caused by: se.kth.iv1201.retail.integration.ItemInventoryException: There is no item in inventory with the ID: 543
-	at se.kth.iv1201.retail.integration.ItemInventory.searchInventory(ItemInventory.java:118)
-	at se.kth.iv1201.retail.integration.ItemInventory.getItemFromInventory(ItemInventory.java:80)
+	at se.kth.iv1201.retail.integration.ItemInventory.searchInventory(ItemInventory.java:87)
+	at se.kth.iv1201.retail.integration.ItemInventory.getItemFromInventory(ItemInventory.java:49)
 	at se.kth.iv1201.retail.controller.Controller.addItem(Controller.java:61)
 	... 2 more
